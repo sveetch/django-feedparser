@@ -26,6 +26,8 @@ Requires
 ********
 
 * `Django`_ >= 1.4;
+* `requests`_ >= 2.7.0',
+* `feedparser`_ >= 5.1.3',
 
 Install
 *******

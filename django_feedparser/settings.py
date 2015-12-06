@@ -20,5 +20,4 @@ FEED_SAFE_FETCHING = True
 # Available renderer engines
 FEED_RENDER_ENGINES = {
     'basic': 'django_feedparser.renderer.FeedBasicRenderer',
-    'wrong-path': 'django_feedparser.renderer.FooWrong',
 }
