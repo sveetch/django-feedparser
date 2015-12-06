@@ -1,0 +1,9 @@
+<div class="columns small-12 medium-centered">
+    <h1>{{ feed_content.feed.title }}</h1>
+</div>
+{% for entry in feed_content.entries %}<hr>
+<div class="columns small-12 medium-centered">
+    <h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
+    <p>{{ entry.summary }}</p>
+</div>
+{% endfor %}
