@@ -7,7 +7,7 @@ setup(
     long_description=open('README.rst').read(),
     author='David Thenon',
     author_email='dthenon@emencia.com',
-    url='https://github.com/emencia/django-feedparser',
+    url='https://github.com/sveetch/django-feedparser',
     license='MIT',
     packages=find_packages(),
     classifiers=[
