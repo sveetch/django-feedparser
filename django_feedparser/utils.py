@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import warnings
 
-from django.utils.importlib import import_module
+try:
+    from importlib import import_module
+except ImportError:
+    from django.utils.importlib import import_module
+
 from django.core.exceptions import ImproperlyConfigured
 
 class FeedparserError(ImproperlyConfigured):
