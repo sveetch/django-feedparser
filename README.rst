@@ -46,7 +46,7 @@ Add it to your installed Django apps in settings: ::
 
 Then import its settings: ::
 
-    from django_feedparser import *
+    from django_feedparser.settings import *
 
 And finally see about `Available settings`_ your can override.
 
