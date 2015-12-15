@@ -14,10 +14,14 @@ FEED_TIMEOUT = 5
 # Wether we accept (True) badly formatted xml feed or not (False)
 FEED_BOZO_ACCEPT = True
 
-# Wether bad http status or request error will throw an exception (False) or not (True)
-FEED_SAFE_FETCHING = True
+# Wether fetching a feed throw an exception (False) or not (True)
+FEED_SAFE_FETCHING = False
 
 # Available renderer engines
 FEED_RENDER_ENGINES = {
-    'basic': 'django_feedparser.renderer.FeedBasicRenderer',
+    'basic-xml': 'django_feedparser.renderer.FeedBasicRenderer',
+    'basic-json': 'django_feedparser.renderer.FeedBasicRenderer',
 }
+
+# Default used renderer name
+FEED_DEFAULT_RENDERER_ENGINE = 'basic-xml'

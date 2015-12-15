@@ -21,6 +21,7 @@ class FeedBasicRenderer(object):
     feed render (when the fetching has been done) itself is not cached.
     """
     cache_key = settings.FEED_CACHE_KEY
+    feed_context_name = 'feed_content'
     _template = settings.FEED_RENDERER_DEFAULT_TEMPLATE
     _timeout = settings.FEED_TIMEOUT
     _bozo_accept = settings.FEED_BOZO_ACCEPT
@@ -37,14 +38,17 @@ class FeedBasicRenderer(object):
     def fetch(self, url):
         """
         Get the feed content using 'requests'
-        
-        TODO: manage request errors. :
-        http://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions
         """
-        r = requests.get(url, timeout=self.timeout)
+        try:
+            r = requests.get(url, timeout=self.timeout)
+        except requests.exceptions.Timeout:
+            if not self.safe:
+                raise
+            else:
+                return None
         
         # Raise 404/500 error if any
-        if not self.safe:
+        if r and not self.safe:
             r.raise_for_status()
         
         return r.text
@@ -115,11 +119,37 @@ class FeedBasicRenderer(object):
         """
         return feed
     
-    def render(self, url, template=None, expiration=0):
-        template = template or self.default_template
-        
+    def get_context(self, url, expiration):
+        """
+        Build template context with formatted feed content
+        """
         self._feed = self.get(url, expiration)
         
-        formatter = self.format_feed_content(self._feed)
+        return {
+            self.feed_context_name: self.format_feed_content(self._feed),
+        }
+    
+    def render(self, url, template=None, expiration=0):
+        """
+        Render feed template
+        """
+        template = template or self.default_template
         
-        return render_to_string(template, {'feed_content': formatter})
+        return render_to_string(template, self.get_context(url, expiration))
+
+
+class FeedJsonRenderer(FeedBasicRenderer):
+    """
+    Basic renderer for JSON content
+    
+    Obviously don't use feedparser to parse it, instead just use ``json.loads(...)``
+    to load the JSON string as Python object
+    """
+    def parse(self, content):
+        """
+        Just return fetched content, JSON dont need to be parsed here
+        """
+        if content is None:
+            return None
+        
+        return json.loads(content)

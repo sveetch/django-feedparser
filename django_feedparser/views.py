@@ -12,7 +12,7 @@ class FeedFetchMixin(object):
     """
     Mixin to contain all feed fetching stuff
     """
-    feed_renderer_name = 'basic'
+    feed_renderer_name = settings.FEED_DEFAULT_RENDERER_ENGINE
     feed_url = None
     feed_template = None
     feed_cache_expiration = 0

@@ -1,6 +1,8 @@
 .. _Django: https://www.djangoproject.com/
 .. _feedparser: https://github.com/kurtmckee/feedparser
 .. _requests: http://docs.python-requests.org/
+.. _DjangoCMS: https://www.django-cms.org
+.. _cmsplugin_feedparser: https://github.com/sveetch/cmsplugin-feedparser
 
 =================
 django-feedparser
@@ -11,10 +13,11 @@ A `Django`_ app using `feedparser`_ to fetch and parse a feed to render it from 
 It is not a Feed agregator since it manage feeds one by one.
 
 * `requests`_ is used to fetch feeds;
-* `feedparser` is used to parse feeds;
+* `feedparser`_ is used to parse feeds;
 * Django cache is used to avoid fetching again the feed each time;
-* Basic feed renderer just parse the feed without modifying anything but you can extend it to implement your post-process formatting;
+* Basic feed renderers just parse the feed without modifying anything but you can extend it to implement your post-process formatting;
 * Once the feed has been fetched, it can be displayed through a template. Default template is really basic and you should eventually override it or create another one to fit to your feed structure/format;
+* A `DjangoCMS`_ plugin is available on `cmsplugin_feedparser`_;
 
 Links
 *****
@@ -48,10 +51,25 @@ Then import its settings: ::
 
     from django_feedparser.settings import *
 
-And finally see about `Available settings`_ your can override.
+And finally see about `Available settings`_ you can override.
 
 Usage
 *****
+
+Renderers
+---------
+
+There is actually two basic renderer available:
+
+basic-xml
+    Just the basic renderer, parsing an XML feed and return result given by `feedparser`.
+    
+    Don't do any special formatting.
+basic-json
+    Like ``basic-xml`` but for a JSON feed, obviously don't use `feedparser` but 
+    the ``json`` builtin from Python and return the loaded object.
+
+Finally, remember than your renderer have to be compatible with the used template and vice-versa.
 
 Views
 -----
@@ -112,9 +130,11 @@ FEED_BOZO_ACCEPT
     **Default value**: ``True``
 
 FEED_SAFE_FETCHING
-    Wether bad http status or request error will throw an exception (``False``) or not (``True``).
+    Wether fetching a feed throw an exception (False) or not (True).
     
-    **Default value**: ``True``
+    Bad http status, request errors and timeout error are silently catched when safe fetching is enabled.
+    
+    **Default value**: ``False``
 
 FEED_RENDER_ENGINES
     A Python dictionnary for available renderer engines, where the key is the shortcut 
@@ -123,5 +143,11 @@ FEED_RENDER_ENGINES
     **Default value**: ::
     
         {
-            'basic': 'django_feedparser.renderer.FeedBasicRenderer',
+            'basic-xml': 'django_feedparser.renderer.FeedBasicRenderer',
+            'basic-json': 'django_feedparser.renderer.FeedBasicRenderer',
         }
+
+DEFAULT_FEED_RENDER_ENGINE
+    The default renderer engine name to use when no one is given.
+    
+    **Default value**: ``basic-xml``
