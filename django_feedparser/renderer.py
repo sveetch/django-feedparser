@@ -4,6 +4,7 @@ Feed renderers
 """
 import hashlib
 
+import six
 from django.conf import settings
 from django.core.cache import cache
 from django.template.loader import render_to_string
@@ -88,7 +89,17 @@ class FeedBasicRenderer(object):
                 feed = None
 
         return feed
-    
+
+    def _hash_url(self, url):
+        """
+        Hash the URL to an md5sum.
+        """
+
+        if isinstance(url, six.text_type):
+            url = url.encode('utf-8')
+
+        return hashlib.md5(url).hexdigest()
+
     def get(self, url, expiration):
         """
         Fetch the feed if no cache exist or if cache is stale
@@ -96,7 +107,7 @@ class FeedBasicRenderer(object):
         # Hash url to have a shorter key and add it expiration time to avoid clash for 
         # other url usage with different expiration
         cache_key = self.cache_key.format(**{
-            'id': hashlib.md5(url).hexdigest(),
+            'id': self._hash_url(url),
             'expire': str(expiration)
         })
         
