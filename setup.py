@@ -13,6 +13,7 @@ setup(
     classifiers=[
         'Programming Language :: Python',
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Development Status :: 5 - Production/Stable',
@@ -29,6 +30,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=[
+        'six',
         'requests>=2.7.0',
         'feedparser>=5.1.3',
     ],

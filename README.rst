@@ -1,3 +1,4 @@
+.. _six: https://pypi.python.org/pypi/six
 .. _Django: https://www.djangoproject.com/
 .. _feedparser: https://github.com/kurtmckee/feedparser
 .. _requests: http://docs.python-requests.org/
@@ -28,6 +29,7 @@ Links
 Requires
 ********
 
+* `six`_;
 * `Django`_ >= 1.4;
 * `requests`_ >= 2.7.0',
 * `feedparser`_ >= 5.1.3',
